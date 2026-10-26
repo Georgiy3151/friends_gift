@@ -262,35 +262,6 @@ p { font-size: clamp(1rem, 1.8vw, 1.1rem); font-weight: 300; line-height: 1.8; c
     border: 8px solid #fff;
 }
 
-/* ================= БИЛЕТ ================= */
-.ticket {
-    background: #fff;
-    border: 1px dashed var(--accent);
-    padding: 30px;
-    border-radius: 16px;
-    margin: 30px auto;
-    max-width: 500px;
-    position: relative;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-    transform: rotate(1deg);
-    transition: transform 0.5s;
-}
-.ticket:hover { transform: rotate(0deg) scale(1.02); }
-.ticket::before, .ticket::after {
-    content: '';
-    position: absolute;
-    width: 24px; height: 24px;
-    background: var(--bg);
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.ticket::before { left: -13px; border-right: 1px dashed var(--accent); }
-.ticket::after { right: -13px; border-left: 1px dashed var(--accent); }
-.ticket .title { font-family: var(--font-head); font-size: 2rem; margin-bottom: 10px; color: var(--text); }
-.ticket .subtitle { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); font-weight: 500; }
-.ticket .desc { font-size: 0.95rem; color: var(--text-soft); margin-top: 20px; font-style: italic; }
-
 /* ================= ВИДЕО-БЛОК ================= */
 .video-block {
     margin: 30px auto;
@@ -507,7 +478,8 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         </div>
 
         <div class="hand reveal">Для моей любимой подружки.<br>С любовью, Ксю.</div>
-        <button class="btn reveal" onclick="nextScreen()">Начать путешествие <span>→</span></button>
+        <!-- Кнопка запускает и переход, и музыку -->
+        <button class="btn reveal" onclick="startJourney()">Начать путешествие <span>→</span></button>
     </div>
 </section>
 
@@ -755,6 +727,45 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
 </section>
 
 <script>
+/* ================= МУЗЫКА ================= */
+const musicBtn = document.getElementById('musicToggle');
+let isPlaying = false;
+let audio = new Audio('music.mp3');
+audio.loop = true;
+audio.volume = 0.3;
+
+// Настройка: начинать с 26-й секунды
+audio.addEventListener('loadedmetadata', function() {
+    audio.currentTime = 26;
+});
+
+// Функция запуска музыки при первом клике
+function startJourney() {
+    audio.play().then(() => {
+        musicBtn.classList.add('playing');
+        musicBtn.textContent = '♫';
+        isPlaying = true;
+    }).catch((e) => {
+        console.log('Автовоспроизведение заблокировано браузером', e);
+    });
+    nextScreen();
+}
+
+// Кнопка вкл/выкл музыки
+musicBtn.addEventListener('click', () => {
+    if (isPlaying) {
+        audio.pause();
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '♪';
+    } else {
+        audio.play().then(() => {
+            musicBtn.classList.add('playing');
+            musicBtn.textContent = '♫';
+        });
+    }
+    isPlaying = !isPlaying;
+});
+
 /* ================= ЛОГИКА ЭКРАНОВ ================= */
 const screens = document.querySelectorAll('.screen');
 const dotsContainer = document.getElementById('screenDots');
@@ -884,32 +895,6 @@ function restartJourney() {
     document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
     goToScreen(0);
 }
-
-/* ================= МУЗЫКА ================= */
-const musicBtn = document.getElementById('musicToggle');
-let isPlaying = false;
-let audio = null;
-
-musicBtn.addEventListener('click', () => {
-    if (!audio) {
-        audio = new Audio('music.mp3');
-        audio.loop = true;
-        audio.volume = 0.3;
-    }
-    if (isPlaying) {
-        audio.pause();
-        musicBtn.classList.remove('playing');
-        musicBtn.textContent = '♪';
-    } else {
-        audio.play().then(() => {
-            musicBtn.classList.add('playing');
-            musicBtn.textContent = '♫';
-        }).catch(() => {
-            console.log('Файл music.mp3 не найден.');
-        });
-    }
-    isPlaying = !isPlaying;
-});
 
 updateProgress();
 </script>
