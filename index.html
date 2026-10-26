@@ -55,7 +55,6 @@ html, body {
     100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
-/* Падающие сердечки */
 .heart-particle {
     position: absolute;
     color: var(--rose);
@@ -89,9 +88,9 @@ html, body {
     inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Текст начинается сверху, чтобы длинные экраны скроллились */
     align-items: center;
-    padding: 60px 24px;
+    padding: 80px 24px;
     opacity: 0;
     visibility: hidden;
     transform: perspective(1500px) rotateX(10deg) translateY(50px) scale(0.95);
@@ -111,7 +110,7 @@ html, body {
 }
 
 .content {
-    max-width: 700px;
+    max-width: 650px;
     width: 100%;
     text-align: center;
     position: relative;
@@ -125,7 +124,7 @@ html, body {
 h1 { font-family: var(--font-head); font-weight: 300; font-size: clamp(3rem, 8vw, 5rem); line-height: 1; margin-bottom: 20px; letter-spacing: -1.5px; }
 h2 { font-family: var(--font-head); font-weight: 300; font-style: italic; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 30px; }
 h3 { font-family: var(--font-head); font-weight: 400; font-size: clamp(1.5rem, 3.5vw, 2.2rem); margin-bottom: 20px; }
-p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; color: var(--text-soft); margin-bottom: 20px; max-width: 90%; }
+p { font-size: clamp(1rem, 1.8vw, 1.1rem); font-weight: 300; line-height: 1.8; color: var(--text-soft); margin-bottom: 18px; max-width: 95%; }
 
 .eyebrow {
     font-size: 0.75rem;
@@ -138,13 +137,26 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
 
 .hand {
     font-family: var(--font-hand);
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     color: var(--accent);
     line-height: 1.2;
-    margin: 35px 0;
+    margin: 30px 0;
     font-weight: 600;
-    max-width: 90%;
+    max-width: 95%;
 }
+
+/* Задания */
+.task-box {
+    background: rgba(255,255,255,0.7);
+    border: 1px dashed var(--accent);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 30px 0;
+    text-align: left;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+.task-box b { display: block; margin-bottom: 10px; font-weight: 500; font-size: 1.05rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
 
 /* ================= КНОПКИ ================= */
 .btn {
@@ -152,7 +164,7 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
     align-items: center;
     justify-content: center;
     gap: 12px;
-    margin-top: 40px;
+    margin-top: 30px;
     padding: 18px 45px;
     background: transparent;
     color: var(--text);
@@ -167,6 +179,7 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
     position: relative;
     overflow: hidden;
     z-index: 1;
+    flex-shrink: 0;
 }
 .btn::before {
     content: '';
@@ -186,45 +199,18 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
 .btn-accent::before { background: var(--accent); }
 .btn-accent:hover { color: #fff; box-shadow: 0 15px 35px rgba(192, 139, 92, 0.4); }
 
-/* ================= ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ ================= */
-.divider {
-    width: 1px;
-    height: 70px;
-    background: linear-gradient(180deg, transparent, var(--accent), transparent);
-    margin: 30px auto;
-}
-.divider-dots {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 30px 0;
-}
-.divider-dots span {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.5;
-    animation: pulse 2s infinite;
-}
-.divider-dots span:nth-child(2) { animation-delay: 0.3s; }
-.divider-dots span:nth-child(3) { animation-delay: 0.6s; }
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.5); opacity: 1; }
-}
-
 /* ================= ИЗОБРАЖЕНИЯ ================= */
 .polaroid {
     background: #fff;
     padding: 16px 16px 50px 16px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
-    transform: rotate(-3deg);
+    transform: rotate(-2deg);
     max-width: 85%;
     margin: 30px auto;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
-.polaroid:hover { transform: rotate(0deg) scale(1.05) translateY(-5px); }
+.polaroid:hover { transform: rotate(0deg) scale(1.02); }
 .polaroid img {
     width: 100%;
     display: block;
@@ -245,7 +231,6 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
     width: 100%;
 }
 
-/* Сетка для нескольких фото */
 .photo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -263,16 +248,16 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
     transition: all 0.5s;
     background: #e8d5c4;
 }
-.photo-grid img:hover { transform: scale(1.05); z-index: 2; position: relative; }
+.photo-grid img:hover { transform: scale(1.03); z-index: 2; position: relative; }
 .photo-grid .full-width { grid-column: 1 / -1; height: 250px; }
 
 /* ================= БИЛЕТ ================= */
 .ticket {
     background: #fff;
     border: 1px dashed var(--accent);
-    padding: 40px 30px;
+    padding: 30px;
     border-radius: 16px;
-    margin: 40px auto;
+    margin: 30px auto;
     max-width: 500px;
     position: relative;
     box-shadow: 0 20px 50px rgba(0,0,0,0.08);
@@ -298,16 +283,14 @@ p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; 
 /* ================= ВИДЕО-БЛОК ================= */
 .video-block {
     margin: 30px auto;
-    padding: 30px;
+    padding: 25px;
     border: 1px solid var(--accent-soft);
     border-radius: 16px;
     max-width: 500px;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: transform 0.3s;
 }
-.video-block:hover { transform: translateY(-5px); }
 .video-block .quote { font-family: var(--font-head); font-style: italic; font-size: 1.3rem; color: var(--text); margin-bottom: 10px; }
 .video-block .meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); }
 
@@ -457,7 +440,7 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     box-shadow: 0 0 12px var(--accent);
 }
 
-/* ================= АНИМАЦИЯ ПОЯВЛЕНИЯ (REVEAL) ================= */
+/* ================= АНИМАЦИЯ ПОЯВЛЕНИЯ ================= */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -475,16 +458,18 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
 .screen.active .reveal:nth-child(6) { transition-delay: 0.6s; }
 .screen.active .reveal:nth-child(7) { transition-delay: 0.7s; }
 .screen.active .reveal:nth-child(8) { transition-delay: 0.8s; }
+.screen.active .reveal:nth-child(9) { transition-delay: 0.9s; }
+.screen.active .reveal:nth-child(10) { transition-delay: 1.0s; }
 
 /* ================= МОБИЛЬНАЯ АДАПТАЦИЯ ================= */
 @media (max-width: 600px) {
-    .screen { padding: 50px 20px; }
+    .screen { padding: 60px 20px; }
     .polaroid { max-width: 95%; }
-    .ticket { padding: 30px 20px; }
     #screenDots { display: none; }
     .btn { padding: 15px 35px; font-size: 0.8rem; }
     .photo-grid { grid-template-columns: 1fr; }
     .photo-grid img { height: 250px; }
+    .photo-grid .full-width { height: 250px; }
 }
 </style>
 </head>
@@ -501,7 +486,7 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">Добро пожаловать в главное путешествие</p>
         <h1 class="reveal">5 органов<br>чувств</h1>
-        <div class="divider reveal"></div>
+        <div class="divider reveal" style="width:1px; height:70px; background:linear-gradient(180deg,transparent,var(--accent),transparent); margin:20px auto;"></div>
         <h2 class="reveal">Путешествие к себе</h2>
         <p class="reveal">Пять маленьких напоминаний и один большой повод вспомнить, какая ты невероятная.</p>
         <div class="hand reveal">Для моей любимой подружки.<br>С любовью, Ксю.</div>
@@ -516,28 +501,35 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         <h3 class="reveal">Моя девочка, добро пожаловать.</h3>
         <p class="reveal">Сегодня я хочу подарить тебе не просто несколько подарков. Я хочу пригласить тебя в маленькое путешествие — к самой себе.</p>
         <p class="reveal">Я знаю, что сейчас для тебя начинается новый этап. А на пороге чего-то нового особенно важно не забыть, кто ты, сколько в тебе красоты, силы, нежности и всего того, что делает тебя именно тобой.</p>
+        <p class="reveal">Я очень хочу, чтобы ты заякорила это состояние — через ощущения, которые останутся с тобой навсегда.</p>
         <p class="reveal">Поэтому сегодня мы будем путешествовать через пять органов чувств. Пробовать, вдыхать, слушать, чувствовать и смотреть.</p>
-        <div class="divider reveal"></div>
+        <p class="reveal">Каждое чувство станет маленьким напоминанием о том, что ты забираешь с собой в новую главу своей жизни.</p>
         <p class="reveal">А теперь устраивайся поудобнее, никуда не торопись и позволь себе побыть главной героиней этой истории.</p>
-        <button class="btn btn-accent reveal" onclick="nextScreen()">Я готова. Начинаем <span>→</span></button>
+        <button class="btn btn-accent reveal" onclick="nextScreen()">Я готова. Начинаем путешествие <span>→</span></button>
     </div>
 </section>
 
-<!-- ================= ЭКРАН 2: ПРЕДИСЛОВИЕ (ВАШЕ СОВМЕСТНОЕ ФОТО) ================= -->
+<!-- ================= ЭКРАН 2: ПРЕДИСЛОВИЕ ================= -->
 <section class="screen" data-screen="2">
     <div class="content">
         <p class="eyebrow reveal">Предисловие</p>
         <h2 class="reveal">«Если бы я могла<br>подарить тебе весь мир...»</h2>
         
-        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
         <div class="polaroid reveal">
             <img src="main-photo.jpg" alt="Наше фото" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop';">
-            <div class="caption">Твоя новая глава</div>
+            <div class="caption">Наше фото</div>
         </div>
 
-        <p class="reveal">Когда я стану очень богатой, я буду баловать тебя всем, чем только смогу. Но пока я не могу подарить тебе весь мир, я хочу подарить кое-что, что, как мне кажется, намного дороже любой вещи.</p>
+        <p class="reveal">Когда я стану очень богатой, я буду баловать тебя всем, чем только смогу. Исполнять твои маленькие и большие желания, устраивать нам невероятные приключения, покупать тебе билеты туда, куда захочется, и напоминать всеми возможными способами, что ты заслуживаешь самого лучшего на свете.</p>
+        <p class="reveal">И я совершенно серьёзно. У меня на тебя большие планы!</p>
+        <p class="reveal">Но пока я не могу подарить тебе весь мир, я хочу подарить кое-что, что, как мне кажется, намного дороже любой вещи.</p>
         <p class="reveal"><strong>Я хочу подарить тебе возможность встретиться с самой собой.</strong></p>
-        <p class="reveal">С той, которая готова к большему, которой можно не доказывать свою ценность, не заслуживать любовь, не ждать разрешения быть счастливой.</p>
+        <p class="reveal">С той, которая, возможно, уже чувствует, что выросла из чего-то старого. С той, которая готова к большему, даже если пока не до конца понимает, как это большее выглядит. С той, которой можно не доказывать свою ценность, не заслуживать любовь, не ждать разрешения быть счастливой.</p>
+        <p class="reveal">Мне хочется, чтобы в этом переходе ты не потеряла себя в ожиданиях, сомнениях и неожиданных обстоятельствах. Чтобы ты не забыла, что за всеми планами, достижениями и мечтами есть ты — живая, чувствующая, удивительная.</p>
+        <p class="reveal">Поэтому я собрала для тебя пять маленьких подарков. Каждый из них — о чём-то большем, чем кажется на первый взгляд.</p>
+        <p class="reveal">И мне очень хочется, чтобы ты не просто открыла их, а почувствовала каждый из них и забрала это ощущение с собой в свою новую главу.</p>
+        <p class="reveal">Потому что самый ценный подарок, который я могу тебе сделать, — напомнить тебе о тебе самой.</p>
+        <div class="hand reveal">Люблю тебя. Ну что, идём?</div>
         <button class="btn reveal" onclick="nextScreen()">Да, идём дальше <span>→</span></button>
     </div>
 </section>
@@ -547,10 +539,21 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">01. Вкус</p>
         <h2 class="reveal">«Разреши себе<br>самое сладкое»</h2>
-        <p class="reveal">Мы так часто куда-то бежим. Но я хочу, чтобы ты помнила: ты можешь наслаждаться уже сейчас. Не за что-то, не в награду, а просто потому, что ты есть.</p>
-        <p class="reveal">Первое, что я хочу тебе подарить, — немного сладости. Пусть она станет символом всего вкусного и прекрасного, что ты разрешаешь себе впустить в жизнь.</p>
-        <div class="hand reveal">«Я разрешаю себе наслаждаться жизнью уже сейчас».</div>
-        <button class="btn reveal" onclick="nextScreen()">Я забираю это чувство <span>→</span></button>
+        <p class="reveal">Начнём с самого простого и одновременно такого важного — с умения наслаждаться.</p>
+        <p class="reveal">Мы так часто куда-то бежим. Чего-то ждём. Ставим цели, преодолеваем трудности, обещаем себе, что вот когда всё получится, тогда наконец выдохнем и разрешим себе радоваться.</p>
+        <p class="reveal">Но я хочу, чтобы ты помнила: ты можешь наслаждаться уже сейчас. Не за что-то, не в награду за свои старания, не после того, как сделаешь всё, что должна. А просто потому, что ты есть.</p>
+        <p class="reveal">Поэтому первое, что я хочу тебе подарить, — немного сладости. Пусть сегодня она станет символом всего вкусного, приятного и прекрасного, что ты разрешаешь себе впустить в свою жизнь.</p>
+        <p class="reveal">Не только клубника в шоколаде, конечно. А путешествия, спонтанные решения, красивые места, любимые занятия, исполненные желания, деньги, которые приносят свободу, и моменты, в которых ты вдруг ловишь себя на мысли: «Боже, это что, правда моя жизнь?!».</p>
+        <p class="reveal">Мне хочется, чтобы в твоей новой главе было больше такого. Больше не только достигнутого, но и прочувствованного. Больше удовольствия от самого пути.</p>
+        
+        <div class="task-box reveal">
+            <b>Твоё маленькое задание</b>
+            Возьми клубнику. Не торопись съедать её между делом. Попробуй, почувствуй вкус, текстуру, сладость.<br><br>
+            И пока наслаждаешься, подумай: какие удовольствия ты хочешь разрешить себе в новом этапе жизни?
+        </div>
+
+        <div class="hand reveal">«Я разрешаю себе наслаждаться жизнью уже сейчас. Мне не нужно заслуживать счастье».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я забираю это чувство с собой <span>→</span></button>
     </div>
 </section>
 
@@ -559,8 +562,21 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">02. Обоняние</p>
         <h2 class="reveal">«Создавай атмосферу,<br>в которой тебе хорошо»</h2>
-        <p class="reveal">Есть что-то удивительное в запахах. Иногда один вдох способен вернуть нас в чувство, в состояние, которое мы уже давно не проживали.</p>
-        <p class="reveal">Можно добиться многого, но так и не почувствовать, что тебе хорошо. А можно учиться создавать это ощущение уже сейчас.</p>
+        <p class="reveal">Есть что-то удивительное в запахах. Иногда один вдох способен вернуть нас в воспоминание, в чувство, в состояние, которое мы уже давно не проживали.</p>
+        <p class="reveal">Запах дома. Чистого постельного белья. Любимых духов. Тёплого вечера. Места, в котором тебе было спокойно.</p>
+        <p class="reveal">И мне хочется, чтобы ты подумала не только о том, какой ты хочешь видеть свою новую жизнь, но и о том, как ты хочешь себя в ней чувствовать.</p>
+        <p class="reveal">Потому что можно прийти к большой цели и обнаружить, что по дороге ты потеряла лёгкость. Можно построить красивую жизнь и всё время быть слишком занятой, чтобы её замечать. Можно добиться многого, но так и не почувствовать, что тебе хорошо.</p>
+        <p class="reveal">А можно учиться создавать это ощущение уже сейчас. Наполнять своё пространство тем, что тебя вдохновляет. Выбирать людей, рядом с которыми можно быть собой. Замечать, когда тебе нужен отдых. Не ждать особенного повода, чтобы зажечь свечу, надеть красивое платье или устроить себе вечер, в котором ты будешь наслаждаться тишиной, забыв обо всех обязанностях.</p>
+        <p class="reveal">Эта свеча — маленькое напоминание о том, что ты имеешь право создавать вокруг себя атмосферу, в которой тебе хорошо.</p>
+
+        <div class="task-box reveal">
+            <b>Твоё маленькое задание</b>
+            Зажги свечу, сделай глубокий вдох и на несколько секунд закрой глаза.<br><br>
+            Представь себя в новой главе жизни. Не думай о конкретных достижениях. Почувствуй атмосферу своей жизни: как проходит твоё утро, что тебя окружает, какие люди рядом, какое состояние ты носишь внутри.<br><br>
+            И спроси себя: «Как я хочу чувствовать себя в своей жизни?»<br><br>
+            Выбери три слова. Пусть они станут твоим внутренним ориентиром.
+        </div>
+
         <div class="hand reveal">«Я создаю жизнь, в которой мне хорошо быть собой».</div>
         <button class="btn reveal" onclick="nextScreen()">Я выбираю своё состояние <span>→</span></button>
     </div>
@@ -571,15 +587,28 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">03. Слух</p>
         <h2 class="reveal">«Услышь кое-что важное»</h2>
-        <p class="reveal">Мне хочется, чтобы ты услышала одну важную вещь: когда ты растёшь и меняешься, тебе можно опираться на любовь. Можно просить поддержки. Можно быть сильной и одновременно нуждаться в чьём-то тепле.</p>
-        
+        <p class="reveal">Из всех звуков, которые окружают нас каждый день, есть те, которые хочется сохранить особенно бережно.</p>
+        <p class="reveal">Смех любимых людей. Разговоры, которые случайно затянулись до утра. Слова, которые были сказаны именно тогда, когда они были нужны. И голоса людей, рядом с которыми ты можешь быть настоящей.</p>
+        <p class="reveal">Мне хочется, чтобы ты услышала одну важную вещь: когда ты растёшь, меняешься, принимаешь непростые решения и выходишь за пределы привычного, тебе можно опираться на любовь. Можно просить поддержки. Можно делиться сомнениями. Можно быть сильной и одновременно нуждаться в чьём-то тепле.</p>
+        <p class="reveal">И мне очень хочется, чтобы в твоей новой главе было много людей, рядом с которыми тебе не нужно уменьшать себя, объяснять свою ценность или притворяться, что ты со всем справляешься.</p>
+        <p class="reveal">Людей, которые искренне радуются твоим победам. Которые не пугаются твоего роста. Которые способны быть рядом и когда у тебя все хорошо, и когда тебе хочется поплакать или забраться на ручки.</p>
+        <p class="reveal">И мне хочется быть тем человеком, который не только говорит тебе об этом, но и напоминает об этом своими действиями.</p>
+
         <div class="video-block reveal">
             <div class="quote">«Отчаянные домохозяйки»</div>
             <div class="meta">8 сезон · 10 серия · 30:45</div>
         </div>
 
+        <div class="task-box reveal">
+            <b>Твоё маленькое задание</b>
+            После просмотра вспомни людей, рядом с которыми ты чувствуешь себя собой.<br><br>
+            А затем подумай, какой голос ты хочешь слышать внутри себя, когда становится страшно или непривычно.<br><br>
+            Не голос сомнений, который убеждает тебя, что ты ещё недостаточно готова. Не голос чужих ожиданий.<br><br>
+            А свой собственный голос — добрый, уверенный, поддерживающий.
+        </div>
+
         <div class="hand reveal">«Мне можно быть собой. Мне можно расти. Мне можно принимать любовь и поддержку».</div>
-        <button class="btn reveal" onclick="nextScreen()">Я слышу себя и близких <span>→</span></button>
+        <button class="btn reveal" onclick="nextScreen()">Я слышу себя и тех, кто меня любит <span>→</span></button>
     </div>
 </section>
 
@@ -588,55 +617,95 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">04. Осязание</p>
         <h2 class="reveal">«Вернись<br>в своё тело»</h2>
-        <p class="reveal">А теперь я хочу поговорить с тобой о нежности. Ты — не проект, который нужно бесконечно совершенствовать. Ты — человек, о котором нужно заботиться.</p>
+        <p class="reveal">А теперь я хочу поговорить с тобой о нежности. Не о той, которую нужно заслужить. Не о той, которую ты должна сначала отдать всем вокруг, а себе оставить по остаточному принципу. А о нежности к самой себе.</p>
+        <p class="reveal">Мы иногда так сильно увлекаемся тем, чтобы стать лучшей версией себя, что начинаем относиться к себе как к бесконечному проекту. Всё время что-то исправлять, улучшать, менять, подтягивать, доказывать.</p>
+        <p class="reveal">Но, моя любимая, мне хочется, чтобы ты помнила: ты — не проект, который нужно бесконечно совершенствовать. Ты — человек, о котором нужно заботиться.</p>
+        <p class="reveal">Твоё тело — не просто инструмент, который помогает тебе добиваться целей. Оно заслуживает внимания, отдыха, прикосновений, тепла и заботы независимо от того, сколько ты сегодня успела и насколько продуктивной была.</p>
+        <p class="reveal">Поэтому я собрала для тебя эти маленькие вещи. Крем, чтобы ты иногда останавливалась и бережно касалась собственных рук. Бальзам для губ, чтобы вспоминала о простых ритуалах заботы. Гель для душа, чтобы даже обычный вечер мог превратиться в маленькое возвращение к себе.</p>
+        <p class="reveal">Мне хочется, чтобы ты научилась не только требовать от себя большего, но и давать себе больше любви. Потому что новый уровень — это не только новые результаты. Это ещё и новое отношение к себе.</p>
 
-        <div class="hand reveal">«Я на своей стороне. Я выбираю заботиться о себе».</div>
-        <button class="btn reveal" onclick="nextScreen()">Я выбираю быть нежнее <span>→</span></button>
+        <div class="task-box reveal">
+            <b>Твоё маленькое задание</b>
+            Сегодня устрой себе небольшой ритуал заботы.<br><br>
+            Прими душ, почувствуй воду на коже, нанеси крем на руки, бальзам на губы. Не делай это на автомате. Побудь в ощущениях.<br><br>
+            И спроси себя: «Если бы я относилась к себе с такой же любовью, с какой хочу, чтобы ко мне относились другие, что бы я изменила в своей повседневной жизни?»<br><br>
+            Возможно, тебе нужно чаще отдыхать. Перестать ругать себя за ошибки. Позволить себе просить о помощи. Или просто перестать откладывать заботу о себе на потом.<br><br>
+            Выбери хотя бы одну маленькую вещь, которую начнёшь делать для себя.
+        </div>
+
+        <div class="hand reveal">«Я на своей стороне. Я выбираю заботиться о себе, а не воевать с собой».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я выбираю быть к себе нежнее <span>→</span></button>
     </div>
 </section>
 
-<!-- ================= ЭКРАН 7: ЗРЕНИЕ (ПОРТРЕТЫ ПОДРУГИ) ================= -->
+<!-- ================= ЭКРАН 7: ЗРЕНИЕ ================= -->
 <section class="screen" data-screen="7">
     <div class="content">
         <p class="eyebrow reveal">05. Зрение</p>
         <h2 class="reveal">«Увидь, насколько<br>ты ахуенная»</h2>
         <p class="reveal">Ну что, моя красотка. Мы добрались до последнего чувства. И здесь я хочу, чтобы ты наконец посмотрела на себя моими глазами.</p>
-        
-        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
+        <p class="reveal">Я не знаю, каким будет твой следующий год, какие решения ты примешь, сколько новых дверей перед тобой откроется и какие мечты ты успеешь воплотить.</p>
+        <p class="reveal">Но я точно знаю одно: в тебе гораздо больше, чем ты иногда себе позволяешь увидеть. В тебе есть сила начинать заново. Есть смелость идти туда, где ещё не была. Есть способность чувствовать глубоко, любить, мечтать, создавать и менять свою жизнь.</p>
+        <p class="reveal">И мне очень хочется, чтобы ты перестала смотреть на себя исключительно через призму того, чего ещё не достигла.</p>
+        <p class="reveal"><strong>Ты уже ахуенная. Не в будущем. Не в какой-то своей улучшенной версии. Уже сейчас.</strong></p>
+        <p class="reveal">А всё, что будет дальше, — это возможность раскрыть ещё больше из того, что в тебе уже есть. Поэтому я дарю тебе сертификат на индивидуальное занятие танцами.</p>
+
         <div class="photo-grid reveal">
             <img src="her-1.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
             <img src="her-2.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop';">
             <img src="her-3.jpg" alt="Она" class="full-width" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop';">
         </div>
 
-        <p class="reveal"><strong>Ты уже ахуенная. Не в будущем. Уже сейчас.</strong></p>
+        <p class="reveal">Это возможность почувствовать всем телом насколько ты невероятная. Двигайся, пробуй, ошибайся, смеяться, будь неловкой, красивой, свободной. Займи пространство собой.</p>
+        <p class="reveal">Пусть этот сертификат станет твоим приглашением сделать что-то новое не ради результата, а ради самой себя и наслаждения от процесса.</p>
+        <p class="reveal">И когда ты будешь на занятии, я хочу, чтобы ты вспомнила: тебе можно пробовать новое просто из любви к жизни.</p>
         
         <div class="ticket reveal">
             <div class="title">Сертификат</div>
             <div class="subtitle">на индивидуальное занятие танцами</div>
-            <div class="desc">Это приглашение сделать что-то новое не ради результата, а ради самой себя.</div>
         </div>
 
-        <button class="btn reveal" onclick="nextScreen()">Я уже та самая!!! <span>→</span></button>
+        <div class="task-box reveal">
+            <b>Твоё маленькое задание</b>
+            Посмотри на себя в зеркало.<br><br>
+            Посмотри на себя как на человека, которого ты очень любишь.<br><br>
+            И назови вслух три вещи, которыми ты восхищаешься в себе.
+        </div>
+
+        <div class="hand reveal">«Я уже та самая. Мне можно занимать своё место в этом мире, быть яркой, пробовать новое и наслаждаться собой».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я уже та самая!!! Поняли все?! <span>→</span></button>
     </div>
 </section>
 
-<!-- ================= ЭКРАН 8: НАПОСЛЕДОК (ФОТО С ПУТЕШЕСТВИЙ) ================= -->
+<!-- ================= ЭКРАН 8: НАПОСЛЕДОК ================= -->
 <section class="screen" data-screen="8">
     <div class="content">
-        <p class="eyebrow reveal">И напоследок</p>
-        <h2 class="reveal">Самое главное</h2>
-        <p class="reveal">Моя любимая девочка. Если ты дошла до этого момента, значит, мы вместе прошли маленькое путешествие через пять чувств.</p>
+        <p class="eyebrow reveal">И напоследок — самое главное</p>
+        <h2 class="reveal">Моя любимая девочка.</h2>
+        <p class="reveal">Если ты дошла до этого момента, значит, мы с тобой вместе прошли маленькое путешествие через пять чувств.</p>
         
-        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
         <div class="polaroid reveal" style="transform: rotate(2deg);">
             <img src="friends.jpg" alt="Мы" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop';">
             <div class="caption">Наши приключения</div>
         </div>
 
-        <p class="reveal">Тебе не обязательно знать весь путь, чтобы сделать следующий шаг. Ты можешь расти в своём темпе. Можешь быть разной — и всё равно оставаться собой.</p>
+        <p class="reveal">И мне хочется, чтобы ты забрала с собой не только подарки, но и всё, о чём мы сегодня говорили.</p>
+        <p class="reveal">Разрешай себе наслаждаться жизнью. Создавай пространство, в котором тебе хорошо. Слушай себя и тех, кто любит тебя по-настоящему. Заботься о себе с нежностью. И не забывай смотреть на себя с восхищением.</p>
+        <p class="reveal">Я знаю, что впереди у тебя много нового. И, возможно, не всё будет понятно сразу. Иногда ты будешь сомневаться, иногда захочется вернуться в привычное, иногда будет казаться, что ты ещё не готова.</p>
+        <p class="reveal">Но я хочу, чтобы в такие моменты ты вспоминала: тебе не обязательно знать весь путь, чтобы сделать следующий шаг.</p>
+        <p class="reveal">Ты можешь расти в своём темпе. Можешь менять решения. Можешь хотеть большего. Можешь ошибаться и начинать заново. Можешь быть разной — и всё равно оставаться собой.</p>
+        <p class="reveal">Желаю, чтобы у тебя хватало смелости выбирать себя, сил воплощать свои идеи и мудрости не проходить мимо счастья, пока ты занята очередной целью.</p>
+        <p class="reveal">Желаю тебе большой любви — к жизни, к миру, к людям и прежде всего к себе.</p>
+        <p class="reveal">Желаю тебе денег, свободы, путешествий, красивых совпадений, спонтанных приключений и историй, которые мы потом будем вспоминать со словами: «Господи, ну и что это вообще было?!»</p>
+        <p class="reveal">Желаю тебе не уменьшать свои мечты до размеров того, что кажется реалистичным. И не уменьшать себя до размеров того, к чему привыкли окружающие.</p>
+        <p class="reveal">Я очень рада, что ты есть в моей жизни. И я хочу ещё много лет видеть, как ты растёшь, раскрываешься, пробуешь, влюбляешься в жизнь и становишься всё ближе к себе настоящей.</p>
+        <p class="reveal">А когда я стану очень богатой, мы, конечно, вернёмся к пункту про баловать тебя всем на свете. Это обещание никто не отменял.</p>
+        <p class="reveal">А пока — вот тебе маленькое напоминание о том, что самое драгоценное у тебя уже есть.</p>
+        <p class="reveal">Ты сама. И у тебя есть целая жизнь, чтобы узнать, сколько прекрасного в тебе и вокруг тебя.</p>
         
-        <div class="hand reveal" style="font-size:2.5rem; margin-top:40px;">Люблю тебя. Очень.<br>С твоим новым этапом.</div>
+        <div class="hand reveal" style="font-size:2.5rem; margin-top:40px;">Люблю тебя. Очень.<br>С твоим новым этапом, моя роскошная женщина. Пусть он будет по-настоящему твоим. ❤️</div>
+        <p class="reveal" style="font-family:var(--font-hand); font-size:1.5rem;">С любовью. И с верой в тебя — всегда.</p>
+        <p class="reveal">Пусть это путешествие станет началом чего-то прекрасного.</p>
         
         <button class="btn btn-accent reveal" onclick="nextScreen()">Завершить путешествие <span>→</span></button>
     </div>
@@ -653,13 +722,13 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
             <div class="choice-btn" onclick="selectChoice(this)">Спокойствие и внутреннюю опору</div>
             <div class="choice-btn" onclick="selectChoice(this)">Любовь и близость</div>
             <div class="choice-btn" onclick="selectChoice(this)">Нежность к себе</div>
-            <div class="choice-btn" onclick="selectChoice(this)">Смелость быть собой</div>
+            <div class="choice-btn" onclick="selectChoice(this)">Смелость быть собой и пробовать новое</div>
         </div>
 
         <p class="reveal" style="margin-top:10px; font-size:0.95rem;">И что ты обещаешь себе в этой новой главе?</p>
         <textarea id="promiseInput" class="reveal" rows="3" placeholder="Напиши своё обещание..."></textarea>
         
-        <button class="btn reveal" id="saveBtn" onclick="savePromise()">Сохранить обещание</button>
+        <button class="btn reveal" id="saveBtn" onclick="savePromise()">Сохранить своё обещание</button>
         
         <div id="finalMessage" class="final-message">
             <div class="final-heart">❤️</div>
