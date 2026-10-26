@@ -529,10 +529,9 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         <p class="eyebrow reveal">Предисловие</p>
         <h2 class="reveal">«Если бы я могла<br>подарить тебе весь мир...»</h2>
         
-        <!-- МЕСТО ДЛЯ ВАШЕГО СОВМЕСТНОГО ФОТО -->
+        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
         <div class="polaroid reveal">
-            <!-- ЗАМЕНИТЕ images/main-photo.jpg НА ВАШЕ ФОТО -->
-            <img src="images/main-photo.jpg" alt="Наше фото" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop';">
+            <img src="main-photo.jpg" alt="Наше фото" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop';">
             <div class="caption">Твоя новая глава</div>
         </div>
 
@@ -549,7 +548,6 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         <p class="eyebrow reveal">01. Вкус</p>
         <h2 class="reveal">«Разреши себе<br>самое сладкое»</h2>
         <p class="reveal">Мы так часто куда-то бежим. Но я хочу, чтобы ты помнила: ты можешь наслаждаться уже сейчас. Не за что-то, не в награду, а просто потому, что ты есть.</p>
-        
         <p class="reveal">Первое, что я хочу тебе подарить, — немного сладости. Пусть она станет символом всего вкусного и прекрасного, что ты разрешаешь себе впустить в жизнь.</p>
         <div class="hand reveal">«Я разрешаю себе наслаждаться жизнью уже сейчас».</div>
         <button class="btn reveal" onclick="nextScreen()">Я забираю это чувство <span>→</span></button>
@@ -597,21 +595,18 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     </div>
 </section>
 
-<!-- ================= ЭКРАН 7: ЗРЕНИЕ (МЕСТА ДЛЯ ПОРТРЕТОВ ПОДРУГИ) ================= -->
+<!-- ================= ЭКРАН 7: ЗРЕНИЕ (ПОРТРЕТЫ ПОДРУГИ) ================= -->
 <section class="screen" data-screen="7">
     <div class="content">
         <p class="eyebrow reveal">05. Зрение</p>
         <h2 class="reveal">«Увидь, насколько<br>ты ахуенная»</h2>
         <p class="reveal">Ну что, моя красотка. Мы добрались до последнего чувства. И здесь я хочу, чтобы ты наконец посмотрела на себя моими глазами.</p>
         
-        <!-- МЕСТА ДЛЯ ПОРТРЕТОВ ПОДРУГИ -->
+        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
         <div class="photo-grid reveal">
-            <!-- ФОТО 1 -->
-            <img src="images/her-1.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
-            <!-- ФОТО 2 -->
-            <img src="images/her-2.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop';">
-            <!-- ФОТО 3 (на всю ширину) -->
-            <img src="images/her-3.jpg" alt="Она" class="full-width" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop';">
+            <img src="her-1.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
+            <img src="her-2.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop';">
+            <img src="her-3.jpg" alt="Она" class="full-width" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop';">
         </div>
 
         <p class="reveal"><strong>Ты уже ахуенная. Не в будущем. Уже сейчас.</strong></p>
@@ -633,10 +628,9 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         <h2 class="reveal">Самое главное</h2>
         <p class="reveal">Моя любимая девочка. Если ты дошла до этого момента, значит, мы вместе прошли маленькое путешествие через пять чувств.</p>
         
-        <!-- МЕСТО ДЛЯ ВАШЕГО СОВМЕСТНОГО ФОТО (в халатах или машине) -->
+        <!-- ЗДЕСЬ ФОТО БЕЗ ПАПКИ -->
         <div class="polaroid reveal" style="transform: rotate(2deg);">
-            <!-- ЗАМЕНИТЕ images/friends.jpg НА ВАШЕ ФОТО -->
-            <img src="images/friends.jpg" alt="Мы" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop';">
+            <img src="friends.jpg" alt="Мы" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop';">
             <div class="caption">Наши приключения</div>
         </div>
 
@@ -734,7 +728,7 @@ for (let i = 0; i < particleCount; i++) {
 /* ================= ПАДАЮЩИЕ СЕРДЕЧКИ ================= */
 const heartsContainer = document.getElementById('falling-hearts');
 const heartSymbols = ['❤️', '🤍', '💕', '✨', '🌸'];
-const heartCount = 25; // Количество сердечек на экране
+const heartCount = 25; 
 
 for (let i = 0; i < heartCount; i++) {
     const h = document.createElement('div');
@@ -742,8 +736,8 @@ for (let i = 0; i < heartCount; i++) {
     h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
     h.style.left = Math.random() * 100 + 'vw';
     h.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
-    h.style.animationDuration = (Math.random() * 10 + 8) + 's'; // От 8 до 18 секунд
-    h.style.animationDelay = (Math.random() * 15) + 's'; // Разные задержки
+    h.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    h.style.animationDelay = (Math.random() * 15) + 's';
     heartsContainer.appendChild(h);
 }
 
