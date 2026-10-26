@@ -88,7 +88,7 @@ html, body {
     inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Текст начинается сверху, чтобы длинные экраны скроллились */
+    justify-content: flex-start;
     align-items: center;
     padding: 80px 24px;
     opacity: 0;
@@ -250,6 +250,17 @@ p { font-size: clamp(1rem, 1.8vw, 1.1rem); font-weight: 300; line-height: 1.8; c
 }
 .photo-grid img:hover { transform: scale(1.03); z-index: 2; position: relative; }
 .photo-grid .full-width { grid-column: 1 / -1; height: 250px; }
+
+/* Картинка сертификата */
+.cert-image {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    margin: 20px auto;
+    display: block;
+    border: 8px solid #fff;
+}
 
 /* ================= БИЛЕТ ================= */
 .ticket {
@@ -486,9 +497,15 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     <div class="content">
         <p class="eyebrow reveal">Добро пожаловать в главное путешествие</p>
         <h1 class="reveal">5 органов<br>чувств</h1>
-        <div class="divider reveal" style="width:1px; height:70px; background:linear-gradient(180deg,transparent,var(--accent),transparent); margin:20px auto;"></div>
+        <div class="divider reveal" style="width:1px; height:50px; background:linear-gradient(180deg,transparent,var(--accent),transparent); margin:15px auto;"></div>
         <h2 class="reveal">Путешествие к себе</h2>
         <p class="reveal">Пять маленьких напоминаний и один большой повод вспомнить, какая ты невероятная.</p>
+        
+        <!-- ФОТО НА ГЛАВНОМ ЭКРАНЕ -->
+        <div class="polaroid reveal" style="max-width: 60%; margin-bottom: 20px;">
+            <img src="station-photo.jpg" alt="Мы на вокзале" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
+        </div>
+
         <div class="hand reveal">Для моей любимой подружки.<br>С любовью, Ксю.</div>
         <button class="btn reveal" onclick="nextScreen()">Начать путешествие <span>→</span></button>
     </div>
@@ -656,14 +673,9 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
             <img src="her-3.jpg" alt="Она" class="full-width" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop';">
         </div>
 
-        <p class="reveal">Это возможность почувствовать всем телом насколько ты невероятная. Двигайся, пробуй, ошибайся, смеяться, будь неловкой, красивой, свободной. Займи пространство собой.</p>
+        <p class="reveal">Это возможность почувствовать всем телом насколько ты невероятная. Двигайся, пробуй, ошибайся, смейся, будь неловкой, красивой, свободной. Займи пространство собой.</p>
         <p class="reveal">Пусть этот сертификат станет твоим приглашением сделать что-то новое не ради результата, а ради самой себя и наслаждения от процесса.</p>
         <p class="reveal">И когда ты будешь на занятии, я хочу, чтобы ты вспомнила: тебе можно пробовать новое просто из любви к жизни.</p>
-        
-        <div class="ticket reveal">
-            <div class="title">Сертификат</div>
-            <div class="subtitle">на индивидуальное занятие танцами</div>
-        </div>
 
         <div class="task-box reveal">
             <b>Твоё маленькое задание</b>
@@ -671,6 +683,9 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
             Посмотри на себя как на человека, которого ты очень любишь.<br><br>
             И назови вслух три вещи, которыми ты восхищаешься в себе.
         </div>
+
+        <!-- КАРТИНКА СЕРТИФИКАТА (вместо плашки) -->
+        <img src="certificate.jpg" alt="Сертификат на танцы" class="cert-image reveal" onerror="this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop';">
 
         <div class="hand reveal">«Я уже та самая. Мне можно занимать своё место в этом мире, быть яркой, пробовать новое и наслаждаться собой».</div>
         <button class="btn reveal" onclick="nextScreen()">Я уже та самая!!! Поняли все?! <span>→</span></button>
@@ -779,7 +794,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goToScreen(currentScreen - 1);
 });
 
-/* ================= ЧАСТИЦЫ (ПЫЛЬ) ================= */
+/* ================= ЧАСТИЦЫ ================= */
 const particlesContainer = document.getElementById('particles');
 const particleCount = window.innerWidth < 600 ? 15 : 35;
 for (let i = 0; i < particleCount; i++) {
@@ -794,7 +809,7 @@ for (let i = 0; i < particleCount; i++) {
     particlesContainer.appendChild(p);
 }
 
-/* ================= ПАДАЮЩИЕ СЕРДЕЧКИ ================= */
+/* ================= СЕРДЕЧКИ ================= */
 const heartsContainer = document.getElementById('falling-hearts');
 const heartSymbols = ['❤️', '🤍', '💕', '✨', '🌸'];
 const heartCount = 25; 
