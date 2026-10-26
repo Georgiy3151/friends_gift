@@ -376,27 +376,6 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 
-/* ================= МУЗЫКА ================= */
-#musicToggle {
-    position: fixed;
-    top: 20px; right: 20px;
-    width: 50px; height: 50px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.8);
-    border: 1px solid var(--accent-soft);
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-}
-#musicToggle:hover { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.15); transform: scale(1.1); }
-#musicToggle.playing { background: var(--accent); color: #fff; animation: rotate 3s linear infinite; }
-@keyframes rotate { 100% { transform: rotate(360deg); } }
-
 /* ================= ИНДИКАТОР ЭКРАНОВ ================= */
 #screenDots {
     position: fixed;
@@ -461,7 +440,6 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
 <div id="particles"></div>
 <div id="falling-hearts"></div>
 <div id="screenDots"></div>
-<button id="musicToggle" title="Включить/выключить музыку">♪</button>
 
 <!-- ================= ЭКРАН 0: ГЛАВНАЯ ================= -->
 <section class="screen active" data-screen="0">
@@ -472,14 +450,12 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
         <h2 class="reveal">Путешествие к себе</h2>
         <p class="reveal">Пять маленьких напоминаний и один большой повод вспомнить, какая ты невероятная.</p>
         
-        <!-- ФОТО НА ГЛАВНОМ ЭКРАНЕ -->
         <div class="polaroid reveal" style="max-width: 60%; margin-bottom: 20px;">
             <img src="station-photo.jpg" alt="Мы на вокзале" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
         </div>
 
         <div class="hand reveal">Для моей любимой подружки.<br>С любовью, Ксю.</div>
-        <!-- Кнопка запускает и переход, и музыку -->
-        <button class="btn reveal" onclick="startJourney()">Начать путешествие <span>→</span></button>
+        <button class="btn reveal" onclick="nextScreen()">Начать путешествие <span>→</span></button>
     </div>
 </section>
 
@@ -727,44 +703,37 @@ textarea::placeholder { color: #b5aca3; font-style: italic; }
 </section>
 
 <script>
-/* ================= МУЗЫКА ================= */
-const musicBtn = document.getElementById('musicToggle');
-let isPlaying = false;
-let audio = new Audio('music.mp3');
+/* ================= АВТОЗАПУСК МУЗЫКИ С 26 СЕКУНДЫ ================= */
+const audio = new Audio('music.mp3');
 audio.loop = true;
 audio.volume = 0.3;
 
-// Настройка: начинать с 26-й секунды
-audio.addEventListener('loadedmetadata', function() {
-    audio.currentTime = 26;
-});
+// Ставим на паузу, чтобы браузер не ругался, и ждем
+audio.pause();
 
-// Функция запуска музыки при первом клике
-function startJourney() {
+// Функция попытки включения
+function tryPlayMusic() {
     audio.play().then(() => {
-        musicBtn.classList.add('playing');
-        musicBtn.textContent = '♫';
-        isPlaying = true;
+        // Успешно включилось! Убираем слушатели, чтобы не срабатывало больше
+        document.removeEventListener('click', tryPlayMusic);
+        document.removeEventListener('touchstart', tryPlayMusic);
     }).catch((e) => {
-        console.log('Автовоспроизведение заблокировано браузером', e);
+        // Браузер заблокировал автоплей, ждем клика
+        console.log('Ждем клика для запуска музыки...');
     });
-    nextScreen();
 }
 
-// Кнопка вкл/выкл музыки
-musicBtn.addEventListener('click', () => {
-    if (isPlaying) {
-        audio.pause();
-        musicBtn.classList.remove('playing');
-        musicBtn.textContent = '♪';
-    } else {
-        audio.play().then(() => {
-            musicBtn.classList.add('playing');
-            musicBtn.textContent = '♫';
-        });
-    }
-    isPlaying = !isPlaying;
+// Как только метаданные загрузятся, перематываем на 26 секунду
+audio.addEventListener('loadedmetadata', function() {
+    audio.currentTime = 26;
+    // Пытаемся запустить сразу же
+    tryPlayMusic();
 });
+
+// Если браузер заблокировал - запускаем при первом клике/касании в любом месте
+document.addEventListener('click', tryPlayMusic);
+document.addEventListener('touchstart', tryPlayMusic);
+
 
 /* ================= ЛОГИКА ЭКРАНОВ ================= */
 const screens = document.querySelectorAll('.screen');
