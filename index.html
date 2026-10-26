@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Путешествие к себе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #fbf8f4;
+    --bg-alt: #f5efe8;
+    --text: #2b2724;
+    --text-soft: #6b635c;
+    --accent: #c08b5c;
+    --accent-soft: #e8d5c4;
+    --rose: #d4a5a5;
+    --font-head: 'Cormorant Garamond', serif;
+    --font-body: 'Montserrat', sans-serif;
+    --font-hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ================= ФОН С ЧАСТИЦАМИ И СЕРДЕЧКАМИ ================= */
+#particles, #falling-hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+.particle {
+    position: absolute;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float linear infinite;
+}
+@keyframes float {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* Падающие сердечки */
+.heart-particle {
+    position: absolute;
+    color: var(--rose);
+    font-size: 1.5rem;
+    opacity: 0.4;
+    animation: fall linear infinite;
+    user-select: none;
+}
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* ================= ПРОГРЕСС-БАР ================= */
+#progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--rose));
+    width: 0%;
+    z-index: 1000;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* ================= ЭКРАНЫ ================= */
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 24px;
+    opacity: 0;
+    visibility: hidden;
+    transform: perspective(1500px) rotateX(10deg) translateY(50px) scale(0.95);
+    filter: blur(10px);
+    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow-y: auto;
+    z-index: 10;
+}
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    transform: perspective(1500px) rotateX(0deg) translateY(0) scale(1);
+    filter: blur(0);
+}
+.screen.prev {
+    transform: perspective(1500px) rotateX(-10deg) translateY(-50px) scale(0.95);
+}
+
+.content {
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ================= ТИПОГРАФИКА ================= */
+h1 { font-family: var(--font-head); font-weight: 300; font-size: clamp(3rem, 8vw, 5rem); line-height: 1; margin-bottom: 20px; letter-spacing: -1.5px; }
+h2 { font-family: var(--font-head); font-weight: 300; font-style: italic; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 30px; }
+h3 { font-family: var(--font-head); font-weight: 400; font-size: clamp(1.5rem, 3.5vw, 2.2rem); margin-bottom: 20px; }
+p { font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300; line-height: 1.8; color: var(--text-soft); margin-bottom: 20px; max-width: 90%; }
+
+.eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--accent);
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.hand {
+    font-family: var(--font-hand);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: var(--accent);
+    line-height: 1.2;
+    margin: 35px 0;
+    font-weight: 600;
+    max-width: 90%;
+}
+
+/* ================= КНОПКИ ================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+    padding: 18px 45px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--text);
+    border-radius: 100px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+.btn:hover::before { transform: scaleX(1); }
+.btn:hover { color: var(--bg); box-shadow: 0 15px 35px rgba(43, 39, 36, 0.25); transform: translateY(-4px); }
+.btn:active { transform: translateY(-1px) scale(0.98); }
+.btn-accent { border-color: var(--accent); color: var(--accent); }
+.btn-accent::before { background: var(--accent); }
+.btn-accent:hover { color: #fff; box-shadow: 0 15px 35px rgba(192, 139, 92, 0.4); }
+
+/* ================= ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ ================= */
+.divider {
+    width: 1px;
+    height: 70px;
+    background: linear-gradient(180deg, transparent, var(--accent), transparent);
+    margin: 30px auto;
+}
+.divider-dots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 30px 0;
+}
+.divider-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.5;
+    animation: pulse 2s infinite;
+}
+.divider-dots span:nth-child(2) { animation-delay: 0.3s; }
+.divider-dots span:nth-child(3) { animation-delay: 0.6s; }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* ================= ИЗОБРАЖЕНИЯ ================= */
+.polaroid {
+    background: #fff;
+    padding: 16px 16px 50px 16px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    transform: rotate(-3deg);
+    max-width: 85%;
+    margin: 30px auto;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+.polaroid:hover { transform: rotate(0deg) scale(1.05) translateY(-5px); }
+.polaroid img {
+    width: 100%;
+    display: block;
+    filter: sepia(20%) contrast(90%) brightness(105%);
+    border-radius: 2px;
+    min-height: 200px;
+    object-fit: cover;
+}
+.polaroid .caption {
+    font-family: var(--font-hand);
+    font-size: 1.6rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 15px;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+}
+
+/* Сетка для нескольких фото */
+.photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 30px 0;
+    width: 100%;
+}
+.photo-grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    filter: sepia(10%) contrast(95%);
+    transition: all 0.5s;
+    background: #e8d5c4;
+}
+.photo-grid img:hover { transform: scale(1.05); z-index: 2; position: relative; }
+.photo-grid .full-width { grid-column: 1 / -1; height: 250px; }
+
+/* ================= БИЛЕТ ================= */
+.ticket {
+    background: #fff;
+    border: 1px dashed var(--accent);
+    padding: 40px 30px;
+    border-radius: 16px;
+    margin: 40px auto;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    transform: rotate(1deg);
+    transition: transform 0.5s;
+}
+.ticket:hover { transform: rotate(0deg) scale(1.02); }
+.ticket::before, .ticket::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    background: var(--bg);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.ticket::before { left: -13px; border-right: 1px dashed var(--accent); }
+.ticket::after { right: -13px; border-left: 1px dashed var(--accent); }
+.ticket .title { font-family: var(--font-head); font-size: 2rem; margin-bottom: 10px; color: var(--text); }
+.ticket .subtitle { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); font-weight: 500; }
+.ticket .desc { font-size: 0.95rem; color: var(--text-soft); margin-top: 20px; font-style: italic; }
+
+/* ================= ВИДЕО-БЛОК ================= */
+.video-block {
+    margin: 30px auto;
+    padding: 30px;
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    max-width: 500px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+.video-block:hover { transform: translateY(-5px); }
+.video-block .quote { font-family: var(--font-head); font-style: italic; font-size: 1.3rem; color: var(--text); margin-bottom: 10px; }
+.video-block .meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); }
+
+/* ================= ФИНАЛ: ВЫБОР ================= */
+.choice-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px 0;
+    width: 100%;
+    max-width: 500px;
+}
+.choice-btn {
+    padding: 20px 25px;
+    background: #fff;
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+}
+.choice-btn::before {
+    content: '';
+    width: 20px; height: 20px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+.choice-btn:hover { border-color: var(--accent); transform: translateX(8px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+.choice-btn.selected {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+    transform: scale(1.02);
+}
+.choice-btn.selected::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 5px rgba(192, 139, 92, 0.3);
+}
+
+textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    resize: none;
+    margin: 20px 0;
+    background: rgba(255,255,255,0.8);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    color: var(--text);
+    text-align: center;
+}
+textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 5px rgba(192, 139, 92, 0.1); }
+textarea::placeholder { color: #b5aca3; font-style: italic; }
+
+/* ================= ФИНАЛЬНЫЙ ЭКРАН ================= */
+.final-message {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 1s ease forwards;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.final-heart {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: heartbeat 2s infinite;
+}
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ================= КОНФЕТТИ ================= */
+.confetti {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 4s ease-out forwards;
+}
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ================= МУЗЫКА ================= */
+#musicToggle {
+    position: fixed;
+    top: 20px; right: 20px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid var(--accent-soft);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+#musicToggle:hover { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.15); transform: scale(1.1); }
+#musicToggle.playing { background: var(--accent); color: #fff; animation: rotate 3s linear infinite; }
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+
+/* ================= ИНДИКАТОР ЭКРАНОВ ================= */
+#screenDots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+#screenDots .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    transition: all 0.4s;
+    cursor: pointer;
+}
+#screenDots .dot:hover { background: var(--accent); transform: scale(1.3); }
+#screenDots .dot.active {
+    background: var(--accent);
+    transform: scale(1.6);
+    box-shadow: 0 0 12px var(--accent);
+}
+
+/* ================= АНИМАЦИЯ ПОЯВЛЕНИЯ (REVEAL) ================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.screen.active .reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+.screen.active .reveal:nth-child(1) { transition-delay: 0.1s; }
+.screen.active .reveal:nth-child(2) { transition-delay: 0.2s; }
+.screen.active .reveal:nth-child(3) { transition-delay: 0.3s; }
+.screen.active .reveal:nth-child(4) { transition-delay: 0.4s; }
+.screen.active .reveal:nth-child(5) { transition-delay: 0.5s; }
+.screen.active .reveal:nth-child(6) { transition-delay: 0.6s; }
+.screen.active .reveal:nth-child(7) { transition-delay: 0.7s; }
+.screen.active .reveal:nth-child(8) { transition-delay: 0.8s; }
+
+/* ================= МОБИЛЬНАЯ АДАПТАЦИЯ ================= */
+@media (max-width: 600px) {
+    .screen { padding: 50px 20px; }
+    .polaroid { max-width: 95%; }
+    .ticket { padding: 30px 20px; }
+    #screenDots { display: none; }
+    .btn { padding: 15px 35px; font-size: 0.8rem; }
+    .photo-grid { grid-template-columns: 1fr; }
+    .photo-grid img { height: 250px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="particles"></div>
+<div id="falling-hearts"></div>
+<div id="screenDots"></div>
+<button id="musicToggle" title="Включить/выключить музыку">♪</button>
+
+<!-- ================= ЭКРАН 0: ГЛАВНАЯ ================= -->
+<section class="screen active" data-screen="0">
+    <div class="content">
+        <p class="eyebrow reveal">Добро пожаловать в главное путешествие</p>
+        <h1 class="reveal">5 органов<br>чувств</h1>
+        <div class="divider reveal"></div>
+        <h2 class="reveal">Путешествие к себе</h2>
+        <p class="reveal">Пять маленьких напоминаний и один большой повод вспомнить, какая ты невероятная.</p>
+        <div class="hand reveal">Для моей любимой подружки.<br>С любовью, Ксю.</div>
+        <button class="btn reveal" onclick="nextScreen()">Начать путешествие <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 1: ВСТУПЛЕНИЕ ================= -->
+<section class="screen" data-screen="1">
+    <div class="content">
+        <p class="eyebrow reveal">Письмо для тебя</p>
+        <h3 class="reveal">Моя девочка, добро пожаловать.</h3>
+        <p class="reveal">Сегодня я хочу подарить тебе не просто несколько подарков. Я хочу пригласить тебя в маленькое путешествие — к самой себе.</p>
+        <p class="reveal">Я знаю, что сейчас для тебя начинается новый этап. А на пороге чего-то нового особенно важно не забыть, кто ты, сколько в тебе красоты, силы, нежности и всего того, что делает тебя именно тобой.</p>
+        <p class="reveal">Поэтому сегодня мы будем путешествовать через пять органов чувств. Пробовать, вдыхать, слушать, чувствовать и смотреть.</p>
+        <div class="divider reveal"></div>
+        <p class="reveal">А теперь устраивайся поудобнее, никуда не торопись и позволь себе побыть главной героиней этой истории.</p>
+        <button class="btn btn-accent reveal" onclick="nextScreen()">Я готова. Начинаем <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 2: ПРЕДИСЛОВИЕ (ВАШЕ СОВМЕСТНОЕ ФОТО) ================= -->
+<section class="screen" data-screen="2">
+    <div class="content">
+        <p class="eyebrow reveal">Предисловие</p>
+        <h2 class="reveal">«Если бы я могла<br>подарить тебе весь мир...»</h2>
+        
+        <!-- МЕСТО ДЛЯ ВАШЕГО СОВМЕСТНОГО ФОТО -->
+        <div class="polaroid reveal">
+            <!-- ЗАМЕНИТЕ images/main-photo.jpg НА ВАШЕ ФОТО -->
+            <img src="images/main-photo.jpg" alt="Наше фото" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop';">
+            <div class="caption">Твоя новая глава</div>
+        </div>
+
+        <p class="reveal">Когда я стану очень богатой, я буду баловать тебя всем, чем только смогу. Но пока я не могу подарить тебе весь мир, я хочу подарить кое-что, что, как мне кажется, намного дороже любой вещи.</p>
+        <p class="reveal"><strong>Я хочу подарить тебе возможность встретиться с самой собой.</strong></p>
+        <p class="reveal">С той, которая готова к большему, которой можно не доказывать свою ценность, не заслуживать любовь, не ждать разрешения быть счастливой.</p>
+        <button class="btn reveal" onclick="nextScreen()">Да, идём дальше <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 3: ВКУС ================= -->
+<section class="screen" data-screen="3">
+    <div class="content">
+        <p class="eyebrow reveal">01. Вкус</p>
+        <h2 class="reveal">«Разреши себе<br>самое сладкое»</h2>
+        <p class="reveal">Мы так часто куда-то бежим. Но я хочу, чтобы ты помнила: ты можешь наслаждаться уже сейчас. Не за что-то, не в награду, а просто потому, что ты есть.</p>
+        
+        <p class="reveal">Первое, что я хочу тебе подарить, — немного сладости. Пусть она станет символом всего вкусного и прекрасного, что ты разрешаешь себе впустить в жизнь.</p>
+        <div class="hand reveal">«Я разрешаю себе наслаждаться жизнью уже сейчас».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я забираю это чувство <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 4: ОБОНЯНИЕ ================= -->
+<section class="screen" data-screen="4">
+    <div class="content">
+        <p class="eyebrow reveal">02. Обоняние</p>
+        <h2 class="reveal">«Создавай атмосферу,<br>в которой тебе хорошо»</h2>
+        <p class="reveal">Есть что-то удивительное в запахах. Иногда один вдох способен вернуть нас в чувство, в состояние, которое мы уже давно не проживали.</p>
+        <p class="reveal">Можно добиться многого, но так и не почувствовать, что тебе хорошо. А можно учиться создавать это ощущение уже сейчас.</p>
+        <div class="hand reveal">«Я создаю жизнь, в которой мне хорошо быть собой».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я выбираю своё состояние <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 5: СЛУХ ================= -->
+<section class="screen" data-screen="5">
+    <div class="content">
+        <p class="eyebrow reveal">03. Слух</p>
+        <h2 class="reveal">«Услышь кое-что важное»</h2>
+        <p class="reveal">Мне хочется, чтобы ты услышала одну важную вещь: когда ты растёшь и меняешься, тебе можно опираться на любовь. Можно просить поддержки. Можно быть сильной и одновременно нуждаться в чьём-то тепле.</p>
+        
+        <div class="video-block reveal">
+            <div class="quote">«Отчаянные домохозяйки»</div>
+            <div class="meta">8 сезон · 10 серия · 30:45</div>
+        </div>
+
+        <div class="hand reveal">«Мне можно быть собой. Мне можно расти. Мне можно принимать любовь и поддержку».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я слышу себя и близких <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 6: ОСЯЗАНИЕ ================= -->
+<section class="screen" data-screen="6">
+    <div class="content">
+        <p class="eyebrow reveal">04. Осязание</p>
+        <h2 class="reveal">«Вернись<br>в своё тело»</h2>
+        <p class="reveal">А теперь я хочу поговорить с тобой о нежности. Ты — не проект, который нужно бесконечно совершенствовать. Ты — человек, о котором нужно заботиться.</p>
+
+        <div class="hand reveal">«Я на своей стороне. Я выбираю заботиться о себе».</div>
+        <button class="btn reveal" onclick="nextScreen()">Я выбираю быть нежнее <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 7: ЗРЕНИЕ (МЕСТА ДЛЯ ПОРТРЕТОВ ПОДРУГИ) ================= -->
+<section class="screen" data-screen="7">
+    <div class="content">
+        <p class="eyebrow reveal">05. Зрение</p>
+        <h2 class="reveal">«Увидь, насколько<br>ты ахуенная»</h2>
+        <p class="reveal">Ну что, моя красотка. Мы добрались до последнего чувства. И здесь я хочу, чтобы ты наконец посмотрела на себя моими глазами.</p>
+        
+        <!-- МЕСТА ДЛЯ ПОРТРЕТОВ ПОДРУГИ -->
+        <div class="photo-grid reveal">
+            <!-- ФОТО 1 -->
+            <img src="images/her-1.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';">
+            <!-- ФОТО 2 -->
+            <img src="images/her-2.jpg" alt="Она" onerror="this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop';">
+            <!-- ФОТО 3 (на всю ширину) -->
+            <img src="images/her-3.jpg" alt="Она" class="full-width" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop';">
+        </div>
+
+        <p class="reveal"><strong>Ты уже ахуенная. Не в будущем. Уже сейчас.</strong></p>
+        
+        <div class="ticket reveal">
+            <div class="title">Сертификат</div>
+            <div class="subtitle">на индивидуальное занятие танцами</div>
+            <div class="desc">Это приглашение сделать что-то новое не ради результата, а ради самой себя.</div>
+        </div>
+
+        <button class="btn reveal" onclick="nextScreen()">Я уже та самая!!! <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 8: НАПОСЛЕДОК (ФОТО С ПУТЕШЕСТВИЙ) ================= -->
+<section class="screen" data-screen="8">
+    <div class="content">
+        <p class="eyebrow reveal">И напоследок</p>
+        <h2 class="reveal">Самое главное</h2>
+        <p class="reveal">Моя любимая девочка. Если ты дошла до этого момента, значит, мы вместе прошли маленькое путешествие через пять чувств.</p>
+        
+        <!-- МЕСТО ДЛЯ ВАШЕГО СОВМЕСТНОГО ФОТО (в халатах или машине) -->
+        <div class="polaroid reveal" style="transform: rotate(2deg);">
+            <!-- ЗАМЕНИТЕ images/friends.jpg НА ВАШЕ ФОТО -->
+            <img src="images/friends.jpg" alt="Мы" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop';">
+            <div class="caption">Наши приключения</div>
+        </div>
+
+        <p class="reveal">Тебе не обязательно знать весь путь, чтобы сделать следующий шаг. Ты можешь расти в своём темпе. Можешь быть разной — и всё равно оставаться собой.</p>
+        
+        <div class="hand reveal" style="font-size:2.5rem; margin-top:40px;">Люблю тебя. Очень.<br>С твоим новым этапом.</div>
+        
+        <button class="btn btn-accent reveal" onclick="nextScreen()">Завершить путешествие <span>→</span></button>
+    </div>
+</section>
+
+<!-- ================= ЭКРАН 9: ФИНАЛ ================= -->
+<section class="screen" data-screen="9">
+    <div class="content">
+        <p class="eyebrow reveal">А теперь твоя очередь</p>
+        <h2 class="reveal">Какое чувство ты хочешь<br>забрать с собой?</h2>
+        
+        <div class="choice-grid reveal" id="choices">
+            <div class="choice-btn" onclick="selectChoice(this)">Разрешение наслаждаться жизнью</div>
+            <div class="choice-btn" onclick="selectChoice(this)">Спокойствие и внутреннюю опору</div>
+            <div class="choice-btn" onclick="selectChoice(this)">Любовь и близость</div>
+            <div class="choice-btn" onclick="selectChoice(this)">Нежность к себе</div>
+            <div class="choice-btn" onclick="selectChoice(this)">Смелость быть собой</div>
+        </div>
+
+        <p class="reveal" style="margin-top:10px; font-size:0.95rem;">И что ты обещаешь себе в этой новой главе?</p>
+        <textarea id="promiseInput" class="reveal" rows="3" placeholder="Напиши своё обещание..."></textarea>
+        
+        <button class="btn reveal" id="saveBtn" onclick="savePromise()">Сохранить обещание</button>
+        
+        <div id="finalMessage" class="final-message">
+            <div class="final-heart">❤️</div>
+            <h2 style="color: var(--accent); margin-bottom: 15px;">Твоё обещание сохранено</h2>
+            <p style="font-size: 1.1rem; color: var(--text-soft); max-width: 80%;">Пусть это будет обещание не кому-то, а самой себе. <br><br>Ты прошла этот путь. Теперь самое время начать новую главу.</p>
+            <button class="btn btn-accent" style="margin-top: 30px;" onclick="restartJourney()">Пройти путешествие заново</button>
+        </div>
+    </div>
+</section>
+
+<script>
+/* ================= ЛОГИКА ЭКРАНОВ ================= */
+const screens = document.querySelectorAll('.screen');
+const dotsContainer = document.getElementById('screenDots');
+let currentScreen = 0;
+
+screens.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToScreen(i);
+    dotsContainer.appendChild(dot);
+});
+
+function updateProgress() {
+    const progress = (currentScreen / (screens.length - 1)) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+    document.querySelectorAll('#screenDots .dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentScreen);
+    });
+}
+
+function goToScreen(index) {
+    if (index < 0 || index >= screens.length) return;
+    screens.forEach((s, i) => {
+        s.classList.remove('active', 'prev');
+        if (i < index) s.classList.add('prev');
+    });
+    screens[index].classList.add('active');
+    screens[index].scrollTop = 0;
+    currentScreen = index;
+    updateProgress();
+}
+
+function nextScreen() { goToScreen(currentScreen + 1); }
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextScreen();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goToScreen(currentScreen - 1);
+});
+
+/* ================= ЧАСТИЦЫ (ПЫЛЬ) ================= */
+const particlesContainer = document.getElementById('particles');
+const particleCount = window.innerWidth < 600 ? 15 : 35;
+for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 5 + 1;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 20 + 15) + 's';
+    p.style.animationDelay = (Math.random() * 20) + 's';
+    particlesContainer.appendChild(p);
+}
+
+/* ================= ПАДАЮЩИЕ СЕРДЕЧКИ ================= */
+const heartsContainer = document.getElementById('falling-hearts');
+const heartSymbols = ['❤️', '🤍', '💕', '✨', '🌸'];
+const heartCount = 25; // Количество сердечек на экране
+
+for (let i = 0; i < heartCount; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-particle';
+    h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+    h.style.animationDuration = (Math.random() * 10 + 8) + 's'; // От 8 до 18 секунд
+    h.style.animationDelay = (Math.random() * 15) + 's'; // Разные задержки
+    heartsContainer.appendChild(h);
+}
+
+/* ================= ЛОГИКА ФИНАЛА ================= */
+function selectChoice(el) {
+    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
+function savePromise() {
+    const textarea = document.getElementById('promiseInput');
+    const selected = document.querySelector('.choice-btn.selected');
+    const finalMsg = document.getElementById('finalMessage');
+    const saveBtn = document.getElementById('saveBtn');
+    const choicesGrid = document.getElementById('choices');
+
+    if (!selected) {
+        alert('Пожалуйста, выбери чувство, которое забираешь с собой.');
+        return;
+    }
+    if (textarea.value.trim() === '') {
+        alert('Напиши хотя бы одно слово в поле для обещания.');
+        return;
+    }
+
+    choicesGrid.style.display = 'none';
+    textarea.style.display = 'none';
+    saveBtn.style.display = 'none';
+    finalMsg.style.display = 'flex';
+
+    triggerConfetti();
+
+    setTimeout(() => {
+        finalMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+}
+
+function triggerConfetti() {
+    const hearts = ['❤️', '💕', '✨', '🌸', '💖', '🤍', '🦋'];
+    for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+            const c = document.createElement('div');
+            c.className = 'confetti';
+            c.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.top = '-30px';
+            c.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 4200);
+        }, i * 60);
+    }
+}
+
+function restartJourney() {
+    document.getElementById('finalMessage').style.display = 'none';
+    document.getElementById('choices').style.display = 'flex';
+    document.getElementById('promiseInput').style.display = 'block';
+    document.getElementById('saveBtn').style.display = 'inline-flex';
+    document.getElementById('promiseInput').value = '';
+    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    goToScreen(0);
+}
+
+/* ================= МУЗЫКА ================= */
+const musicBtn = document.getElementById('musicToggle');
+let isPlaying = false;
+let audio = null;
+
+musicBtn.addEventListener('click', () => {
+    if (!audio) {
+        audio = new Audio('music.mp3');
+        audio.loop = true;
+        audio.volume = 0.3;
+    }
+    if (isPlaying) {
+        audio.pause();
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '♪';
+    } else {
+        audio.play().then(() => {
+            musicBtn.classList.add('playing');
+            musicBtn.textContent = '♫';
+        }).catch(() => {
+            console.log('Файл music.mp3 не найден.');
+        });
+    }
+    isPlaying = !isPlaying;
+});
+
+updateProgress();
+</script>
+</body>
+</html>
